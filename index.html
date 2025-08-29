@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Kecerdasan Artifisial - Kelas 5</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --text-dark: #1f2937;
+            --text-gray: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 15px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--bg-white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: var(--text-gray);
+        }
+
+        .progress-container {
+            background: var(--bg-light);
+            border-radius: 10px;
+            padding: 8px;
+            margin-top: 15px;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--secondary), var(--primary-light));
+            height: 10px;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-top: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .settings-panel-mini {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .mini-toggle {
+            width: 45px;
+            height: 45px;
+            background: var(--bg-white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease;
+            font-size: 20px;
+            border: 2px solid var(--border);
+        }
+
+        .mini-toggle:hover {
+            transform: scale(1.1);
+            border-color: var(--primary);
+        }
+
+        .mini-toggle.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .main-content {
+            background: var(--bg-white);
+            border-radius: 15px;
+            padding: 25px;
+            flex: 1;
+            box-shadow: var(--shadow);
+            margin-bottom: 15px;
+        }
+
+        .scene {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .scene.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scene-title {
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .intro-text {
+            font-size: 20px;
+            line-height: 1.8;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .story-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 6px solid var(--warning);
+            position: relative;
+        }
+
+
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .comparison-card {
+            background: var(--bg-light);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .comparison-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .comparison-card .emoji {
+            font-size: 60px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .activity-box {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 3px solid var(--primary-light);
+        }
+
+        .activity-title {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .drag-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .draggable-item {
+            background: var(--bg-white);
+            border: 3px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: grab;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .draggable-item:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .draggable-item.dragging {
+            opacity: 0.6;
+            transform: rotate(3deg);
+        }
+
+        .drop-zones {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .drop-zone {
+            background: var(--bg-light);
+            border: 4px dashed var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            min-height: 200px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.drag-over {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.1);
+            transform: scale(1.02);
+        }
+
+        .drop-zone h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .question-card {
+            background: var(--bg-light);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 6px solid var(--primary);
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option {
+            background: var(--bg-white);
+            border: 3px solid var(--border);
+            border-radius: 12px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 18px;
+            font-weight: 500;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.05);
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.1);
+        }
+
+        .option.correct {
+            border-color: var(--secondary);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .option.incorrect {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .feedback.correct {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--secondary);
+            border: 2px solid var(--secondary);
+        }
+
+        .feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 2px solid var(--danger);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 25px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 55px;
+            min-width: 140px;
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background: var(--text-gray);
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn-success {
+            background: var(--secondary);
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid var(--border);
+            border-radius: 12px;
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-family: inherit;
+            text-align: center;
+        }
+
+        .name-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .fun-fact {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            position: relative;
+        }
+
+
+
+        .score-display {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .score-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .example-card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .example-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .example-card .emoji {
+            font-size: 40px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .main-content { padding: 20px; }
+            .scene-title { font-size: 28px; }
+            .comparison-grid { grid-template-columns: 1fr; }
+            .drop-zones { grid-template-columns: 1fr; }
+            .controls { flex-direction: column; }
+            .btn { width: 100%; }
+            .settings-panel-mini { top: 10px; right: 10px; }
+            .mini-toggle { width: 40px; height: 40px; font-size: 18px; }
+        }
+
+        /* Reduced Motion */
+        .reduced-motion * {
+            animation: none !important;
+            transition: none !important;
+        }
+
+        /* Focus Styles */
+        *:focus {
+            outline: 3px solid rgba(79, 70, 229, 0.3);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🤖 Belajar Kecerdasan Artifisial</h1>
+            <p>Kelas 5 - Mari Kenali KA di Sekitar Kita!</p>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-text" id="progressText">Langkah 0 dari 9</div>
+            </div>
+        </div>
+
+        <!-- Settings Panel -->
+        <div class="settings-panel-mini">
+            <div class="mini-toggle" id="soundToggle" role="switch" aria-checked="true" tabindex="0" title="Suara">
+                🔊
+            </div>
+            <div class="mini-toggle" id="animationToggle" role="switch" aria-checked="false" tabindex="0" title="Mode Hemat Animasi">
+                ⚡
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Scene 0: Welcome -->
+            <div class="scene active" id="scene0">
+                <h2 class="scene-title">Halo Teman-teman! 👋</h2>
+                <div class="intro-text">
+                    Hari ini kita akan belajar tentang <strong>Kecerdasan Artifisial</strong> atau yang sering disebut <strong>KA</strong>!
+                </div>
+                <div class="story-box">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">🎮 Tahukah Kamu?</h3>
+                    <p style="font-size: 18px; line-height: 1.6;">
+                        Ketika kamu bermain game di HP dan musuhnya bisa bergerak sendiri, atau ketika YouTube tahu video apa yang kamu suka... 
+                        itu semua menggunakan <strong>Kecerdasan Artifisial</strong>! Keren kan? 😊
+                    </p>
+                </div>
+                <input type="text" class="name-input" id="studentName" placeholder="Tulis nama kamu di sini..." aria-label="Nama siswa">
+                <div class="controls">
+                    <div></div>
+                    <button class="btn" onclick="nextScene()" id="startBtn" disabled>🚀 Ayo Mulai!</button>
+                </div>
+            </div>
+
+            <!-- Scene 1: Analogi Sederhana -->
+            <div class="scene" id="scene1">
+                <h2 class="scene-title">Seperti Otak Manusia 🧠</h2>
+                <div class="story-box">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">🤔 Coba Bayangkan...</h3>
+                    <p style="font-size: 18px; line-height: 1.8;">
+                        Ketika kamu melihat kucing, otakmu langsung tahu "Oh, itu kucing!" 
+                        Bagaimana bisa? Karena otakmu sudah belajar dari melihat banyak kucing sebelumnya.
+                    </p>
+                </div>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <span class="emoji">👶</span>
+                        <h3>Otak Manusia</h3>
+                        <p>• Belajar dari pengalaman<br>• Mengingat pola<br>• Membuat keputusan</p>
+                    </div>
+                    <div class="comparison-card">
+                        <span class="emoji">🤖</span>
+                        <h3>Kecerdasan Artifisial</h3>
+                        <p>• Belajar dari data<br>• Mengingat pola<br>• Membuat keputusan</p>
+                    </div>
+                </div>
+
+                <div class="fun-fact">
+                    <h3 style="margin-bottom: 10px;">Jadi, KA itu seperti otak komputer yang bisa belajar!</h3>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="prevScene()">⬅️ Kembali</button>
+                    <button class="btn" onclick="nextScene()">Lanjut ➡️</button>
+                </div>
+            </div>
+
+            <!-- Scene 2: AI di Sekitar Kita -->
+            <div class="scene" id="scene2">
+                <h2 class="scene-title">KA Ada di Mana-mana! 🌟</h2>
+                <div class="intro-text">
+                    Ternyata, kamu sudah sering menggunakan KA tanpa sadar lho!
+                </div>
+
+                <div class="examples-grid">
+                    <div class="example-card">
+                        <span class="emoji">📱</span>
+                        <h4>Siri & Google Assistant</h4>
+                        <p>Bisa ngobrol dan jawab pertanyaan</p>
+                    </div>
+                    <div class="example-card">
+                        <span class="emoji">🎵</span>
+                        <h4>Spotify & YouTube</h4>
+                        <p>Tahu lagu dan video yang kamu suka</p>
+                    </div>
+                    <div class="example-card">
+                        <span class="emoji">📷</span>
+                        <h4>Kamera HP</h4>
+                        <p>Bisa deteksi wajah dan bikin foto cantik</p>
+                    </div>
+                    <div class="example-card">
+                        <span class="emoji">🎮</span>
+                        <h4>Game Mobile</h4>
+                        <p>Musuh yang pintar dan tantangan seru</p>
+                    </div>
+                    <div class="example-card">
+                        <span class="emoji">🗺️</span>
+                        <h4>Google Maps</h4>
+                        <p>Cari jalan tercepat dan hindari macet</p>
+                    </div>
+                    <div class="example-card">
+                        <span class="emoji">🛒</span>
+                        <h4>Shopee & Tokopedia</h4>
+                        <p>Rekomendasikan barang yang kamu butuhkan</p>
+                    </div>
+                </div>
+
+                <div class="fun-fact">
+                    <h3 style="margin-bottom: 10px;">Wah, ternyata KA sudah jadi teman sehari-hari kita ya! 🤩</h3>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="prevScene()">⬅️ Kembali</button>
+                    <button class="btn" onclick="nextScene()">Lanjut ➡️</button>
+                </div>
+            </div>
+
+            <!-- Scene 3: Aktivitas Drag & Drop -->
+            <div class="scene" id="scene3">
+                <h2 class="scene-title">Ayo Main Tebak-tebakan! 🎯</h2>
+                
+                <!-- Level Selection -->
+                <div id="levelSelection" class="activity-box">
+                    <div class="activity-title">Pilih Level Kesulitan</div>
+                    <div class="examples-grid" style="grid-template-columns: repeat(3, 1fr); margin: 20px 0;">
+                        <div class="example-card" onclick="selectDragLevel('easy')" style="cursor: pointer;">
+                            <span class="emoji">😊</span>
+                            <h4>Mudah</h4>
+                            <p>4 item sederhana</p>
+                        </div>
+                        <div class="example-card" onclick="selectDragLevel('medium')" style="cursor: pointer;">
+                            <span class="emoji">🤔</span>
+                            <h4>Sedang</h4>
+                            <p>6 item campuran</p>
+                        </div>
+                        <div class="example-card" onclick="selectDragLevel('hard')" style="cursor: pointer;">
+                            <span class="emoji">🧠</span>
+                            <h4>Sukar</h4>
+                            <p>8 item menantang</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Area -->
+                <div id="dragGameArea" class="activity-box" style="display: none;">
+                    <div class="activity-title">Mana yang Menggunakan KA?</div>
+                    <p style="text-align: center; margin-bottom: 20px; font-size: 18px;">
+                        Seret dan letakkan setiap item ke kotak yang tepat!
+                    </p>
+                    
+                    <div class="drop-zones">
+                        <div class="drop-zone" id="aiZone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <h3>🤖 Pakai KA</h3>
+                            <div class="dropped-items" id="aiItems"></div>
+                        </div>
+                        <div class="drop-zone" id="nonAiZone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <h3>🔧 Tidak Pakai KA</h3>
+                            <div class="dropped-items" id="nonAiItems"></div>
+                        </div>
+                    </div>
+
+                    <div class="drag-items" id="dragItems">
+                        <!-- Items will be populated by JavaScript -->
+                    </div>
+
+                    <div id="dragFeedback" class="feedback" style="display: none;"></div>
+                    
+                    <div style="text-align: center; margin-top: 15px;">
+                        <button class="btn btn-secondary" onclick="backToLevelSelection()">🔄 Ganti Level</button>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="prevScene()">⬅️ Kembali</button>
+                    <button class="btn" onclick="checkDragDrop()" id="checkDragBtn" style="display: none;">✅ Periksa Jawaban</button>
+                    <button class="btn" onclick="nextScene()" id="nextFromDrag" style="display: none;">Lanjut ➡️</button>
+                </div>
+            </div>
+
+            <!-- Scene 4: Aktivitas Bermain Peran -->
+            <div class="scene" id="scene4">
+                <h2 class="scene-title">Bermain Peran dengan KA! 🎭</h2>
+                
+                <!-- Level Selection -->
+                <div id="rolePlayLevelSelection" class="activity-box">
+                    <div class="activity-title">Pilih Peran yang Ingin Dimainkan</div>
+                    <div class="examples-grid" style="grid-template-columns: repeat(3, 1fr); margin: 20px 0;">
+                        <div class="example-card" onclick="selectRolePlayLevel('easy')" style="cursor: pointer;">
+                            <span class="emoji">👶</span>
+                            <h4>Mudah</h4>
+                            <p>Anak yang belajar KA</p>
+                        </div>
+                        <div class="example-card" onclick="selectRolePlayLevel('medium')" style="cursor: pointer;">
+                            <span class="emoji">👨‍🏫</span>
+                            <h4>Sedang</h4>
+                            <p>Guru yang mengajar KA</p>
+                        </div>
+                        <div class="example-card" onclick="selectRolePlayLevel('hard')" style="cursor: pointer;">
+                            <span class="emoji">👨‍💻</span>
+                            <h4>Sukar</h4>
+                            <p>Ahli KA yang menjelaskan</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Role Play Area -->
+                <div id="rolePlayArea" class="activity-box" style="display: none;">
+                    <div class="activity-title" id="rolePlayTitle">Bermain Peran</div>
+                    <div id="rolePlayScenario" class="story-box">
+                        <!-- Scenario will be populated by JavaScript -->
+                    </div>
+                    
+                    <div id="rolePlayQuestions">
+                        <!-- Questions will be populated by JavaScript -->
+                    </div>
+
+                    <div id="rolePlayFeedback" class="feedback" style="display: none;"></div>
+                    
+                    <div style="text-align: center; margin-top: 15px;">
+                        <button class="btn btn-secondary" onclick="backToRolePlaySelection()">🔄 Ganti Peran</button>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="prevScene()">⬅️ Kembali</button>
+                    <button class="btn" onclick="checkRolePlay()" id="checkRolePlayBtn" style="display: none;">✅ Selesai Peran</button>
+                    <button class="btn" onclick="nextScene()" id="nextFromRolePlay" style="display: none;">Lanjut ➡️</button>
+                </div>
+            </div>
+
+            <!-- Scene 5: Cara Kerja AI Sederhana -->
+            <div class="scene" id="scene5">
+                <h2 class="scene-title">Bagaimana KA Belajar? 📚</h2>
+                
+                <div class="story-box">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">🍎 Cerita Sederhana</h3>
+                    <p style="font-size: 18px; line-height: 1.8;">
+                        Bayangkan kamu mengajari adik kecil mengenali buah apel. 
+                        Kamu tunjukkan 100 foto apel yang berbeda-beda. 
+                        Lama-lama dia hafal ciri-ciri apel: bulat, merah/hijau, ada tangkainya.
+                    </p>
+                </div>
+
+                <div class="examples-grid">
+                    <div class="example-card">
+                        <span class="emoji">📊</span>
+                        <h4>1. Kasih Data</h4>
+                        <p>KA diberi banyak contoh (foto, suara, teks)</p>
+                    </div>
+                    <div class="example-card">
+                        <span class="emoji">🔍</span>
+                        <h4>2. Cari Pola</h4>
+                        <p>KA mencari kesamaan dari semua contoh</p>
+                    </div>
+                    <div class="example-card">
+                        <span class="emoji">🎓</span>
+                        <h4>3. Belajar</h4>
+                        <p>KA mengingat pola yang ditemukan</p>
+                    </div>
+                    <div class="example-card">
+                        <span class="emoji">🎯</span>
+                        <h4>4. Prediksi</h4>
+                        <p>KA bisa menebak hal baru berdasarkan yang dipelajari</p>
+                    </div>
+                </div>
+
+                <div class="fun-fact">
+                    <h3 style="margin-bottom: 10px;">Semakin banyak data, semakin pintar KA-nya! 🚀</h3>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="prevScene()">⬅️ Kembali</button>
+                    <button class="btn" onclick="nextScene()">Lanjut ➡️</button>
+                </div>
+            </div>
+
+            <!-- Scene 6: Kuis Sederhana -->
+            <div class="scene" id="scene6">
+                <h2 class="scene-title">Kuis Seru! 🧩</h2>
+                <div class="question-card" id="questionContainer">
+                    <!-- Questions will be populated by JavaScript -->
+                </div>
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="prevScene()">⬅️ Kembali</button>
+                    <button class="btn" onclick="nextQuestion()" id="nextQuestionBtn">Jawab</button>
+                </div>
+            </div>
+
+            <!-- Scene 7: Dampak AI -->
+            <div class="scene" id="scene7">
+                <h2 class="scene-title">KA: Baik atau Buruk? ⚖️</h2>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card" style="border-color: var(--secondary);">
+                        <span class="emoji">😊</span>
+                        <h3 style="color: var(--secondary);">Yang Baik</h3>
+                        <ul style="text-align: left; padding-left: 20px;">
+                            <li>Membantu belajar lebih mudah</li>
+                            <li>Game jadi lebih seru</li>
+                            <li>Dokter bisa lebih cepat bantu pasien</li>
+                            <li>Cari informasi jadi gampang</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-card" style="border-color: var(--warning);">
+                        <span class="emoji">😟</span>
+                        <h3 style="color: var(--warning);">Yang Perlu Hati-hati</h3>
+                        <ul style="text-align: left; padding-left: 20px;">
+                            <li>Jangan terlalu bergantung</li>
+                            <li>Data pribadi harus dijaga</li>
+                            <li>Tetap perlu belajar sendiri</li>
+                            <li>Tidak semua informasi KA benar</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="fun-fact">
+                    <h3 style="margin-bottom: 10px;">Yang penting: gunakan KA dengan bijak! 🤝</h3>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="prevScene()">⬅️ Kembali</button>
+                    <button class="btn" onclick="nextScene()">Lanjut ➡️</button>
+                </div>
+            </div>
+
+            <!-- Scene 8: Hasil & Penutup -->
+            <div class="scene" id="scene8">
+                <h2 class="scene-title">Selamat! 🎉</h2>
+                
+                <div class="score-display">
+                    <div class="score-number" id="finalScore">0%</div>
+                    <div style="font-size: 18px;">Skor Kamu</div>
+                </div>
+
+                <div id="finalFeedback"></div>
+
+                <div class="story-box">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">🌟 Apa yang Sudah Kamu Pelajari?</h3>
+                    <ul style="font-size: 18px; line-height: 1.8; padding-left: 20px;">
+                        <li>KA itu seperti otak komputer yang bisa belajar</li>
+                        <li>KA ada di mana-mana dalam kehidupan kita</li>
+                        <li>KA belajar dari banyak data dan contoh</li>
+                        <li>KA punya sisi baik dan perlu digunakan dengan bijak</li>
+                    </ul>
+                </div>
+
+                <div class="fun-fact">
+                    <h3 style="margin-bottom: 10px;">Kamu sudah jadi teman KA yang pintar! Terus belajar ya! 🚀</h3>
+                </div>
+
+                <div class="controls">
+                    <button class="btn" onclick="goHome()">🏠 Beranda</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data untuk aktivitas drag & drop berdasarkan level
+        const DRAG_ITEMS = {
+            easy: [
+                { text: "Siri di iPhone", category: "ai" },
+                { text: "Pensil", category: "non-ai" },
+                { text: "YouTube", category: "ai" },
+                { text: "Buku", category: "non-ai" }
+            ],
+            medium: [
+                { text: "Face ID untuk buka HP", category: "ai" },
+                { text: "Kalkulator biasa", category: "non-ai" },
+                { text: "Google Assistant", category: "ai" },
+                { text: "Jam dinding", category: "non-ai" },
+                { text: "Netflix yang tahu film favoritmu", category: "ai" },
+                { text: "Lampu meja", category: "non-ai" }
+            ],
+            hard: [
+                { text: "Algoritma rekomendasi Spotify", category: "ai" },
+                { text: "Mesin cuci otomatis", category: "non-ai" },
+                { text: "Chatbot customer service", category: "ai" },
+                { text: "Remote TV biasa", category: "non-ai" },
+                { text: "Sistem deteksi spam email", category: "ai" },
+                { text: "Kipas angin manual", category: "non-ai" },
+                { text: "Fitur autocorrect di keyboard", category: "ai" },
+                { text: "Stapler", category: "non-ai" }
+            ]
+        };
+
+        // Data untuk aktivitas bermain peran
+        const ROLE_PLAY_SCENARIOS = {
+            easy: {
+                title: "Kamu adalah Anak yang Belajar KA 👶",
+                scenario: "Kamu baru saja mendengar tentang Kecerdasan Artifisial dari guru. Sekarang kamu ingin tahu lebih banyak! Teman-temanmu bertanya padamu tentang KA.",
+                questions: [
+                    {
+                        question: "Teman: 'Apa sih KA itu?' Jawab dengan kata-kata sederhana:",
+                        options: [
+                            "KA itu seperti otak komputer yang bisa belajar",
+                            "KA itu robot yang bisa jalan",
+                            "KA itu aplikasi di HP",
+                            "KA itu game komputer"
+                        ],
+                        correct: 0
+                    },
+                    {
+                        question: "Teman: 'Dimana kita bisa ketemu KA?' Kamu jawab:",
+                        options: [
+                            "Cuma di film-film aja",
+                            "Di YouTube, Siri, dan game HP kita",
+                            "Cuma di laboratorium",
+                            "Belum ada di dunia nyata"
+                        ],
+                        correct: 1
+                    }
+                ]
+            },
+            medium: {
+                title: "Kamu adalah Guru yang Mengajar KA 👨‍🏫",
+                scenario: "Kamu adalah guru yang harus menjelaskan KA kepada murid-murid kelas 5. Mereka penasaran dan bertanya banyak hal. Jawablah dengan cara yang mudah dipahami!",
+                questions: [
+                    {
+                        question: "Murid: 'Pak/Bu, bagaimana KA bisa pintar?' Jelaskan:",
+                        options: [
+                            "KA belajar dari banyak contoh, seperti kita belajar mengenali wajah",
+                            "KA sudah pintar dari lahir",
+                            "KA meniru manusia saja",
+                            "KA menggunakan sihir"
+                        ],
+                        correct: 0
+                    },
+                    {
+                        question: "Murid: 'Apakah KA berbahaya?' Jawaban terbaik:",
+                        options: [
+                            "Ya, KA sangat berbahaya",
+                            "Tidak, KA selalu aman",
+                            "KA bisa membantu, tapi kita harus bijak menggunakannya",
+                            "KA tidak ada hubungannya dengan kita"
+                        ],
+                        correct: 2
+                    },
+                    {
+                        question: "Murid: 'Bisakah KA menggantikan guru?' Kamu jawab:",
+                        options: [
+                            "Ya, KA akan menggantikan semua guru",
+                            "KA bisa membantu belajar, tapi guru tetap penting untuk membimbing",
+                            "Tidak, KA tidak berguna untuk pendidikan",
+                            "KA hanya untuk hiburan saja"
+                        ],
+                        correct: 1
+                    }
+                ]
+            },
+            hard: {
+                title: "Kamu adalah Ahli KA yang Menjelaskan 👨‍💻",
+                scenario: "Kamu adalah ahli KA yang diminta menjelaskan konsep KA kepada anak-anak dengan cara yang menarik. Kamu harus memberikan penjelasan yang akurat tapi mudah dipahami.",
+                questions: [
+                    {
+                        question: "Anak: 'Bagaimana KA bisa tahu lagu yang aku suka?' Penjelasan teknis yang sederhana:",
+                        options: [
+                            "KA menganalisis pola dari lagu yang sering kamu dengar dan cari yang mirip",
+                            "KA menebak-nebak saja",
+                            "KA bertanya ke teman-temanmu",
+                            "KA menggunakan kamera untuk lihat ekspresi wajahmu"
+                        ],
+                        correct: 0
+                    },
+                    {
+                        question: "Anak: 'Apa bedanya KA dengan program komputer biasa?' Jelaskan:",
+                        options: [
+                            "Tidak ada bedanya",
+                            "KA bisa belajar dan beradaptasi, program biasa hanya mengikuti instruksi tetap",
+                            "KA lebih cepat saja",
+                            "KA hanya bisa di HP, program biasa di komputer"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Anak: 'Bisakah kita membuat KA sendiri?' Jawaban yang memotivasi:",
+                        options: [
+                            "Tidak mungkin, terlalu sulit",
+                            "Hanya orang dewasa yang bisa",
+                            "Bisa! Mulai dengan belajar coding dan matematika, ada tools sederhana untuk belajar",
+                            "Tunggu sampai kuliah dulu"
+                        ],
+                        correct: 2
+                    },
+                    {
+                        question: "Anak: 'Apa yang harus kita siapkan untuk masa depan dengan KA?' Saran terbaik:",
+                        options: [
+                            "Tidak usah belajar apa-apa, KA akan mengerjakan semua",
+                            "Tetap belajar, kembangkan kreativitas, dan gunakan KA sebagai alat bantu",
+                            "Hindari semua teknologi KA",
+                            "Fokus hanya pada pelajaran tradisional"
+                        ],
+                        correct: 1
+                    }
+                ]
+            }
+        };
+
+        // Pertanyaan kuis (disesuaikan untuk anak kelas 5)
+        const QUESTIONS = [
+            {
+                question: "Apa yang membuat KA bisa pintar seperti manusia?",
+                options: [
+                    "KA belajar dari banyak contoh dan data",
+                    "KA punya otak seperti manusia",
+                    "KA tidak perlu belajar, sudah pintar dari awal",
+                    "KA hanya meniru apa yang dilihat"
+                ],
+                correct: 0
+            },
+            {
+                question: "Manakah contoh KA yang paling sering kamu gunakan?",
+                options: [
+                    "Buku tulis",
+                    "YouTube yang merekomendasikan video",
+                    "Sepeda",
+                    "Tas sekolah"
+                ],
+                correct: 1
+            },
+            {
+                question: "Mengapa AI bisa tahu lagu yang kamu suka di Spotify?",
+                options: [
+                    "AI menebak-nebak saja",
+                    "AI belajar dari lagu yang sering kamu dengar",
+                    "AI bertanya ke teman-temanmu",
+                    "AI tidak tahu, hanya kebetulan"
+                ],
+                correct: 1
+            },
+            {
+                question: "Apa yang harus kita lakukan saat menggunakan AI?",
+                options: [
+                    "Percaya 100% pada semua jawaban AI",
+                    "Tidak pernah menggunakan AI sama sekali",
+                    "Menggunakan AI dengan bijak dan tetap belajar sendiri",
+                    "Hanya menggunakan AI untuk bermain game"
+                ],
+                correct: 2
+            },
+            {
+                question: "Bagaimana AI bisa membantu dokter?",
+                options: [
+                    "AI menggantikan dokter sepenuhnya",
+                    "AI membantu dokter menganalisis hasil tes lebih cepat",
+                    "AI tidak bisa membantu dokter",
+                    "AI hanya bisa memberikan obat"
+                ],
+                correct: 1
+            }
+        ];
+
+        const FEEDBACK = {
+            correct: [
+                "Hebat! Kamu benar! 🎉",
+                "Bagus sekali! Kamu pintar! ⭐",
+                "Benar! Terus semangat! 🚀",
+                "Keren! Kamu memahami AI dengan baik! 💡"
+            ],
+            incorrect: [
+                "Belum tepat, tapi tidak apa-apa! Ayo belajar lagi! 💪",
+                "Jawaban belum benar, tapi kamu sudah berusaha! 🌟",
+                "Tidak masalah! Mari coba lagi! 📚",
+                "Belum tepat, tapi terus semangat! 🎯"
+            ]
+        };
+
+        // State Management
+        let currentScene = 0;
+        let studentName = '';
+        let dragAnswers = {};
+        let mcqAnswers = [];
+        let currentQuestion = 0;
+        let score = 0;
+        let soundEnabled = true;
+        let animationEnabled = true;
+        let currentDragLevel = '';
+        let currentRolePlayLevel = '';
+        let rolePlayAnswers = [];
+        let currentRolePlayQuestion = 0;
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', function() {
+            loadState();
+            setupEventListeners();
+            initializeDragItems();
+            updateProgress();
+            
+            if (currentScene === 5) {
+                loadQuestion();
+            }
+        });
+
+        function setupEventListeners() {
+            const nameInput = document.getElementById('studentName');
+            nameInput.addEventListener('input', function() {
+                const startBtn = document.getElementById('startBtn');
+                startBtn.disabled = this.value.trim().length < 2;
+                if (this.value.trim().length >= 2) {
+                    studentName = this.value.trim();
+                    saveState();
+                }
+            });
+
+            document.getElementById('soundToggle').addEventListener('click', toggleSound);
+            document.getElementById('animationToggle').addEventListener('click', toggleAnimation);
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const toggle = document.getElementById('soundToggle');
+            toggle.classList.toggle('active');
+            toggle.setAttribute('aria-checked', soundEnabled);
+            toggle.textContent = soundEnabled ? '🔊' : '🔇';
+            playSound('ui_click');
+            saveState();
+        }
+
+        function toggleAnimation() {
+            animationEnabled = !animationEnabled;
+            const toggle = document.getElementById('animationToggle');
+            toggle.classList.toggle('active');
+            toggle.setAttribute('aria-checked', animationEnabled);
+            
+            if (!animationEnabled) {
+                document.body.classList.add('reduced-motion');
+                toggle.textContent = '⚡';
+            } else {
+                document.body.classList.remove('reduced-motion');
+                toggle.textContent = '🎬';
+            }
+            
+            playSound('ui_click');
+            saveState();
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                const frequencies = {
+                    ui_click: 800,
+                    correct: 523.25,
+                    incorrect: 293.66,
+                    success: 659.25
+                };
+                
+                oscillator.frequency.setValueAtTime(frequencies[type] || 400, audioContext.currentTime);
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.2);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.2);
+            } catch (e) {
+                console.log('Audio not supported');
+            }
+        }
+
+        function selectDragLevel(level) {
+            currentDragLevel = level;
+            document.getElementById('levelSelection').style.display = 'none';
+            document.getElementById('dragGameArea').style.display = 'block';
+            document.getElementById('checkDragBtn').style.display = 'inline-block';
+            
+            initializeDragItems();
+            playSound('ui_click');
+            saveState();
+        }
+
+        function backToLevelSelection() {
+            document.getElementById('levelSelection').style.display = 'block';
+            document.getElementById('dragGameArea').style.display = 'none';
+            document.getElementById('checkDragBtn').style.display = 'none';
+            document.getElementById('nextFromDrag').style.display = 'none';
+            
+            currentDragLevel = '';
+            dragAnswers = {};
+            playSound('ui_click');
+            saveState();
+        }
+
+        function initializeDragItems() {
+            const container = document.getElementById('dragItems');
+            if (!container || !currentDragLevel) return;
+            
+            container.innerHTML = '';
+            document.getElementById('aiItems').innerHTML = '';
+            document.getElementById('nonAiItems').innerHTML = '';
+            dragAnswers = {};
+            
+            const items = DRAG_ITEMS[currentDragLevel];
+            items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'draggable-item';
+                div.draggable = true;
+                div.textContent = item.text;
+                div.id = `item-${index}`;
+                div.setAttribute('data-category', item.category);
+                
+                div.addEventListener('dragstart', dragStart);
+                div.addEventListener('dragend', dragEnd);
+                
+                container.appendChild(div);
+            });
+        }
+
+        function dragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.id);
+            e.target.classList.add('dragging');
+            playSound('ui_click');
+        }
+
+        function dragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        function allowDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('drag-over');
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over');
+            
+            const itemId = e.dataTransfer.getData('text/plain');
+            const item = document.getElementById(itemId);
+            const dropZone = e.currentTarget;
+            
+            if (item && dropZone) {
+                const targetContainer = dropZone.querySelector('.dropped-items') || dropZone;
+                targetContainer.appendChild(item);
+                
+                const category = dropZone.id === 'aiZone' ? 'ai' : 'non-ai';
+                dragAnswers[itemId] = category;
+                
+                playSound('ui_click');
+                saveState();
+            }
+        }
+
+        function checkDragDrop() {
+            if (!currentDragLevel) return;
+            
+            let correct = 0;
+            const items = DRAG_ITEMS[currentDragLevel];
+            let total = items.length;
+            
+            items.forEach((item, index) => {
+                const itemId = `item-${index}`;
+                const userAnswer = dragAnswers[itemId];
+                
+                if (userAnswer === item.category) {
+                    correct++;
+                }
+            });
+            
+            const percentage = Math.round((correct / total) * 100);
+            const feedback = document.getElementById('dragFeedback');
+            
+            // Bonus points based on difficulty
+            let difficultyMultiplier = currentDragLevel === 'easy' ? 0.3 : currentDragLevel === 'medium' ? 0.35 : 0.4;
+            
+            if (percentage >= 70) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = `Hebat! Kamu benar ${correct} dari ${total}! Skor: ${percentage}%! 🎉`;
+                playSound('correct');
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Kamu benar ${correct} dari ${total}. Skor: ${percentage}%. Ayo coba lagi! 💪`;
+                playSound('incorrect');
+            }
+            
+            feedback.style.display = 'block';
+            document.getElementById('checkDragBtn').style.display = 'none';
+            document.getElementById('nextFromDrag').style.display = 'inline-block';
+            
+            score += percentage * difficultyMultiplier;
+            saveState();
+        }
+
+        function selectRolePlayLevel(level) {
+            currentRolePlayLevel = level;
+            currentRolePlayQuestion = 0;
+            rolePlayAnswers = [];
+            
+            document.getElementById('rolePlayLevelSelection').style.display = 'none';
+            document.getElementById('rolePlayArea').style.display = 'block';
+            document.getElementById('checkRolePlayBtn').style.display = 'inline-block';
+            
+            loadRolePlayScenario();
+            playSound('ui_click');
+            saveState();
+        }
+
+        function backToRolePlaySelection() {
+            document.getElementById('rolePlayLevelSelection').style.display = 'block';
+            document.getElementById('rolePlayArea').style.display = 'none';
+            document.getElementById('checkRolePlayBtn').style.display = 'none';
+            document.getElementById('nextFromRolePlay').style.display = 'none';
+            
+            currentRolePlayLevel = '';
+            rolePlayAnswers = [];
+            currentRolePlayQuestion = 0;
+            playSound('ui_click');
+            saveState();
+        }
+
+        function loadRolePlayScenario() {
+            if (!currentRolePlayLevel) return;
+            
+            const scenario = ROLE_PLAY_SCENARIOS[currentRolePlayLevel];
+            document.getElementById('rolePlayTitle').textContent = scenario.title;
+            document.getElementById('rolePlayScenario').innerHTML = `
+                <h3 style="color: var(--primary); margin-bottom: 15px;">🎭 Skenario</h3>
+                <p style="font-size: 18px; line-height: 1.6;">${scenario.scenario}</p>
+            `;
+            
+            loadRolePlayQuestion();
+        }
+
+        function loadRolePlayQuestion() {
+            if (!currentRolePlayLevel) return;
+            
+            const scenario = ROLE_PLAY_SCENARIOS[currentRolePlayLevel];
+            if (currentRolePlayQuestion >= scenario.questions.length) {
+                return;
+            }
+            
+            const question = scenario.questions[currentRolePlayQuestion];
+            const container = document.getElementById('rolePlayQuestions');
+            
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-text">
+                        ${question.question}
+                    </div>
+                    <div class="options">
+                        ${question.options.map((option, index) => `
+                            <div class="option" onclick="selectRolePlayOption(${index})" data-index="${index}">
+                                ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('checkRolePlayBtn').textContent = 
+                currentRolePlayQuestion < scenario.questions.length - 1 ? 'Pertanyaan Selanjutnya' : 'Selesai Peran';
+        }
+
+        function selectRolePlayOption(index) {
+            document.querySelectorAll('#rolePlayQuestions .option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            document.querySelector(`#rolePlayQuestions [data-index="${index}"]`).classList.add('selected');
+            rolePlayAnswers[currentRolePlayQuestion] = index;
+            
+            playSound('ui_click');
+            saveState();
+        }
+
+        function checkRolePlay() {
+            if (!currentRolePlayLevel) return;
+            
+            const scenario = ROLE_PLAY_SCENARIOS[currentRolePlayLevel];
+            const userAnswer = rolePlayAnswers[currentRolePlayQuestion];
+            
+            if (userAnswer === undefined) {
+                alert('Pilih jawaban dulu ya!');
+                return;
+            }
+            
+            const question = scenario.questions[currentRolePlayQuestion];
+            const options = document.querySelectorAll('#rolePlayQuestions .option');
+            
+            // Show correct/incorrect answers
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === userAnswer && index !== question.correct) {
+                    option.classList.add('incorrect');
+                }
+                option.onclick = null;
+            });
+            
+            const isCorrect = userAnswer === question.correct;
+            
+            // Show immediate feedback
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedbackDiv.style.marginTop = '15px';
+            
+            if (isCorrect) {
+                feedbackDiv.textContent = 'Benar! Peran kamu bagus sekali! 🎭✨';
+                let basePoints = currentRolePlayLevel === 'easy' ? 8 : currentRolePlayLevel === 'medium' ? 10 : 12;
+                score += basePoints;
+                playSound('correct');
+                
+                // Allow to continue after correct answer
+                document.getElementById('checkRolePlayBtn').textContent = 
+                    currentRolePlayQuestion < scenario.questions.length - 1 ? 'Pertanyaan Selanjutnya' : 'Selesai Peran';
+                document.getElementById('checkRolePlayBtn').onclick = proceedToNextRolePlayQuestion;
+                
+            } else {
+                feedbackDiv.textContent = 'Belum tepat. Coba pikirkan lagi jawaban yang lebih sesuai dengan peranmu! 🤔';
+                playSound('incorrect');
+                
+                // Show "Try Again" button for incorrect answers
+                document.getElementById('checkRolePlayBtn').textContent = 'Coba Lagi';
+                document.getElementById('checkRolePlayBtn').onclick = retryRolePlayQuestion;
+            }
+            
+            // Add feedback to the question container
+            const questionContainer = document.getElementById('rolePlayQuestions');
+            questionContainer.appendChild(feedbackDiv);
+            
+            saveState();
+        }
+
+        function retryRolePlayQuestion() {
+            // Reset the current question to allow retry
+            rolePlayAnswers[currentRolePlayQuestion] = undefined;
+            loadRolePlayQuestion();
+            document.getElementById('checkRolePlayBtn').textContent = 
+                currentRolePlayQuestion < ROLE_PLAY_SCENARIOS[currentRolePlayLevel].questions.length - 1 ? 'Pertanyaan Selanjutnya' : 'Selesai Peran';
+            document.getElementById('checkRolePlayBtn').onclick = checkRolePlay;
+            playSound('ui_click');
+        }
+
+        function proceedToNextRolePlayQuestion() {
+            currentRolePlayQuestion++;
+            
+            if (currentRolePlayQuestion < ROLE_PLAY_SCENARIOS[currentRolePlayLevel].questions.length) {
+                loadRolePlayQuestion();
+                document.getElementById('checkRolePlayBtn').onclick = checkRolePlay;
+            } else {
+                // Show completion feedback
+                const feedback = document.getElementById('rolePlayFeedback');
+                let correct = 0;
+                rolePlayAnswers.forEach((answer, index) => {
+                    if (answer === ROLE_PLAY_SCENARIOS[currentRolePlayLevel].questions[index].correct) correct++;
+                });
+                
+                const percentage = Math.round((correct / ROLE_PLAY_SCENARIOS[currentRolePlayLevel].questions.length) * 100);
+                
+                if (percentage >= 70) {
+                    feedback.className = 'feedback correct';
+                    feedback.textContent = `Hebat! Kamu berperan dengan baik! Skor: ${percentage}%! 🎭✨`;
+                } else {
+                    feedback.className = 'feedback incorrect';
+                    feedback.textContent = `Bagus! Terus berlatih bermain peran! Skor: ${percentage}% 🎭`;
+                }
+                
+                feedback.style.display = 'block';
+                document.getElementById('checkRolePlayBtn').style.display = 'none';
+                document.getElementById('nextFromRolePlay').style.display = 'inline-block';
+            }
+            
+            saveState();
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= QUESTIONS.length) {
+                nextScene();
+                return;
+            }
+            
+            const question = QUESTIONS[currentQuestion];
+            const container = document.getElementById('questionContainer');
+            
+            container.innerHTML = `
+                <div class="question-text">
+                    Pertanyaan ${currentQuestion + 1}: ${question.question}
+                </div>
+                <div class="options">
+                    ${question.options.map((option, index) => `
+                        <div class="option" onclick="selectOption(${index})" data-index="${index}">
+                            ${option}
+                        </div>
+                    `).join('')}
+                </div>
+                <div id="questionFeedback" class="feedback" style="display: none;"></div>
+            `;
+            
+            document.getElementById('nextQuestionBtn').textContent = 'Jawab';
+            document.getElementById('nextQuestionBtn').onclick = checkAnswer;
+        }
+
+        function selectOption(index) {
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            document.querySelector(`[data-index="${index}"]`).classList.add('selected');
+            mcqAnswers[currentQuestion] = index;
+            
+            playSound('ui_click');
+            saveState();
+        }
+
+        function checkAnswer() {
+            const question = QUESTIONS[currentQuestion];
+            const userAnswer = mcqAnswers[currentQuestion];
+            
+            if (userAnswer === undefined) {
+                alert('Pilih jawaban dulu ya!');
+                return;
+            }
+            
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('questionFeedback');
+            
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === userAnswer && index !== question.correct) {
+                    option.classList.add('incorrect');
+                }
+                option.onclick = null;
+            });
+            
+            const isCorrect = userAnswer === question.correct;
+            const feedbackTexts = isCorrect ? FEEDBACK.correct : FEEDBACK.incorrect;
+            const randomFeedback = feedbackTexts[Math.floor(Math.random() * feedbackTexts.length)];
+            
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedback.textContent = randomFeedback;
+            feedback.style.display = 'block';
+            
+            if (isCorrect) {
+                score += 12; // 12 points per question (5 questions = 60%)
+                playSound('correct');
+            } else {
+                playSound('incorrect');
+            }
+            
+            document.getElementById('nextQuestionBtn').textContent = 
+                currentQuestion < QUESTIONS.length - 1 ? 'Pertanyaan Selanjutnya' : 'Lihat Hasil';
+            document.getElementById('nextQuestionBtn').onclick = nextQuestion;
+            
+            saveState();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < QUESTIONS.length) {
+                loadQuestion();
+            } else {
+                nextScene();
+            }
+        }
+
+        function nextScene() {
+            if (currentScene < 8) {
+                currentScene++;
+                showScene();
+                
+                if (currentScene === 6 && currentQuestion === 0) {
+                    loadQuestion();
+                } else if (currentScene === 8) {
+                    showResults();
+                }
+                
+                playSound('ui_click');
+                saveState();
+            }
+        }
+
+        function prevScene() {
+            if (currentScene > 0) {
+                currentScene--;
+                showScene();
+                playSound('ui_click');
+                saveState();
+            }
+        }
+
+        function showScene() {
+            document.querySelectorAll('.scene').forEach(scene => {
+                scene.classList.remove('active');
+            });
+            
+            document.getElementById(`scene${currentScene}`).classList.add('active');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = (currentScene / 8) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `Langkah ${currentScene} dari 9`;
+        }
+
+        function showResults() {
+            const finalScore = Math.min(100, Math.max(0, Math.round(score)));
+            document.getElementById('finalScore').textContent = `${finalScore}%`;
+            
+            const feedback = document.getElementById('finalFeedback');
+            let message = '';
+            
+            if (finalScore >= 80) {
+                message = `
+                    <div class="fun-fact">
+                        <h3 style="margin-bottom: 10px;">🌟 Luar Biasa, ${studentName}!</h3>
+                        <p>Kamu sudah memahami AI dengan sangat baik! Kamu bisa jadi ahli AI masa depan! 🚀</p>
+                    </div>
+                `;
+                playSound('success');
+            } else if (finalScore >= 60) {
+                message = `
+                    <div class="story-box">
+                        <h3 style="color: var(--primary); margin-bottom: 10px;">👍 Bagus, ${studentName}!</h3>
+                        <p>Kamu sudah paham tentang AI! Terus belajar dan eksplorasi teknologi ya! 📚</p>
+                    </div>
+                `;
+                playSound('correct');
+            } else {
+                message = `
+                    <div class="activity-box">
+                        <h3 style="color: var(--warning); margin-bottom: 10px;">💪 Semangat, ${studentName}!</h3>
+                        <p>Kamu sudah berusaha dengan baik! Coba ulangi lagi untuk memahami AI lebih dalam! 🎯</p>
+                    </div>
+                `;
+                playSound('ui_click');
+            }
+            
+            feedback.innerHTML = message;
+        }
+
+        function restartLearning() {
+            if (confirm('Mau belajar dari awal lagi?')) {
+                currentScene = 0;
+                currentQuestion = 0;
+                score = 0;
+                dragAnswers = {};
+                mcqAnswers = [];
+                
+                document.getElementById('studentName').value = '';
+                studentName = '';
+                document.getElementById('startBtn').disabled = true;
+                
+                initializeDragItems();
+                showScene();
+                updateProgress();
+                
+                playSound('ui_click');
+                saveState();
+            }
+        }
+
+        function goHome() {
+            currentScene = 0;
+            currentQuestion = 0;
+            score = 0;
+            dragAnswers = {};
+            mcqAnswers = [];
+            
+            document.getElementById('studentName').value = '';
+            studentName = '';
+            document.getElementById('startBtn').disabled = true;
+            
+            initializeDragItems();
+            showScene();
+            updateProgress();
+            
+            playSound('ui_click');
+            saveState();
+        }
+
+        function saveState() {
+            const state = {
+                currentScene,
+                studentName,
+                dragAnswers,
+                mcqAnswers,
+                currentQuestion,
+                score,
+                soundEnabled,
+                animationEnabled,
+                currentDragLevel,
+                currentRolePlayLevel,
+                rolePlayAnswers,
+                currentRolePlayQuestion
+            };
+            
+            localStorage.setItem('aiLearningState', JSON.stringify(state));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('aiLearningState');
+            if (saved) {
+                const state = JSON.parse(saved);
+                currentScene = state.currentScene || 0;
+                studentName = state.studentName || '';
+                dragAnswers = state.dragAnswers || {};
+                mcqAnswers = state.mcqAnswers || [];
+                currentQuestion = state.currentQuestion || 0;
+                score = state.score || 0;
+                soundEnabled = state.soundEnabled !== undefined ? state.soundEnabled : true;
+                animationEnabled = state.animationEnabled !== undefined ? state.animationEnabled : true;
+                currentDragLevel = state.currentDragLevel || '';
+                currentRolePlayLevel = state.currentRolePlayLevel || '';
+                rolePlayAnswers = state.rolePlayAnswers || [];
+                currentRolePlayQuestion = state.currentRolePlayQuestion || 0;
+                
+                document.getElementById('studentName').value = studentName;
+                
+                const soundToggle = document.getElementById('soundToggle');
+                const animToggle = document.getElementById('animationToggle');
+                
+                if (soundEnabled) {
+                    soundToggle.classList.add('active');
+                    soundToggle.textContent = '🔊';
+                } else {
+                    soundToggle.classList.remove('active');
+                    soundToggle.textContent = '🔇';
+                }
+                soundToggle.setAttribute('aria-checked', soundEnabled);
+                
+                if (animationEnabled) {
+                    animToggle.classList.remove('active');
+                    animToggle.textContent = '🎬';
+                    document.body.classList.remove('reduced-motion');
+                } else {
+                    animToggle.classList.add('active');
+                    animToggle.textContent = '⚡';
+                    document.body.classList.add('reduced-motion');
+                }
+                animToggle.setAttribute('aria-checked', animationEnabled);
+                
+                showScene();
+            }
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976fdff935214109',t:'MTc1NjUxMDYzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
