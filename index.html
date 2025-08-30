@@ -707,18 +707,18 @@
                     <div class="examples-grid" style="grid-template-columns: repeat(3, 1fr); margin: 20px 0;">
                         <div class="example-card" onclick="selectRolePlayLevel('easy')" style="cursor: pointer;">
                             <span class="emoji">👶</span>
-                            <h4>Mudah</h4>
-                            <p>Anak yang belajar KA</p>
+                            <h4>Pemula</h4>
+                            <p>Anak yang baru kenal KA</p>
                         </div>
                         <div class="example-card" onclick="selectRolePlayLevel('medium')" style="cursor: pointer;">
-                            <span class="emoji">👨‍🏫</span>
-                            <h4>Sedang</h4>
-                            <p>Guru yang mengajar KA</p>
+                            <span class="emoji">🤔</span>
+                            <h4>Penasaran</h4>
+                            <p>Anak yang sudah paham dasar</p>
                         </div>
                         <div class="example-card" onclick="selectRolePlayLevel('hard')" style="cursor: pointer;">
-                            <span class="emoji">👨‍💻</span>
-                            <h4>Sukar</h4>
-                            <p>Ahli KA yang menjelaskan</p>
+                            <span class="emoji">🧠</span>
+                            <h4>Ahli Kecil</h4>
+                            <p>Anak yang sudah mahir KA</p>
                         </div>
                     </div>
                 </div>
@@ -907,7 +907,7 @@
         // Data untuk aktivitas bermain peran
         const ROLE_PLAY_SCENARIOS = {
             easy: {
-                title: "Kamu adalah Anak yang Belajar KA 👶",
+                title: "Anak Pemula: Baru Kenal KA 👶",
                 scenario: "Kamu baru saja mendengar tentang Kecerdasan Artifisial dari guru. Sekarang kamu ingin tahu lebih banyak! Teman-temanmu bertanya padamu tentang KA.",
                 questions: [
                     {
@@ -933,11 +933,11 @@
                 ]
             },
             medium: {
-                title: "Kamu adalah Guru yang Mengajar KA 👨‍🏫",
-                scenario: "Kamu adalah guru yang harus menjelaskan KA kepada murid-murid kelas 5. Mereka penasaran dan bertanya banyak hal. Jawablah dengan cara yang mudah dipahami!",
+                title: "Anak Penasaran: Sudah Paham Dasar KA 🤔",
+                scenario: "Kamu sudah belajar tentang KA dan sekarang lebih paham. Adik kelasmu yang masih kelas 3 bertanya-tanya tentang KA. Sebagai kakak kelas, kamu ingin menjelaskan dengan baik!",
                 questions: [
                     {
-                        question: "Murid: 'Pak/Bu, bagaimana KA bisa pintar?' Jelaskan:",
+                        question: "Adik kelas: 'Kakak, bagaimana KA bisa pintar?' Kamu jelaskan:",
                         options: [
                             "KA belajar dari banyak contoh, seperti kita belajar mengenali wajah",
                             "KA sudah pintar dari lahir",
@@ -947,7 +947,7 @@
                         correct: 0
                     },
                     {
-                        question: "Murid: 'Apakah KA berbahaya?' Jawaban terbaik:",
+                        question: "Adik kelas: 'Apakah KA berbahaya?' Kamu jawab dengan bijak:",
                         options: [
                             "Ya, KA sangat berbahaya",
                             "Tidak, KA selalu aman",
@@ -957,10 +957,10 @@
                         correct: 2
                     },
                     {
-                        question: "Murid: 'Bisakah KA menggantikan guru?' Kamu jawab:",
+                        question: "Adik kelas: 'Bisakah KA menggantikan guru?' Kamu jawab:",
                         options: [
                             "Ya, KA akan menggantikan semua guru",
-                            "KA bisa membantu belajar, tapi guru tetap penting untuk membimbing",
+                            "KA bisa membantu belajar, tapi guru tetap penting untuk membimbing kita",
                             "Tidak, KA tidak berguna untuk pendidikan",
                             "KA hanya untuk hiburan saja"
                         ],
@@ -969,21 +969,21 @@
                 ]
             },
             hard: {
-                title: "Kamu adalah Ahli KA yang Menjelaskan 👨‍💻",
-                scenario: "Kamu adalah ahli KA yang diminta menjelaskan konsep KA kepada anak-anak dengan cara yang menarik. Kamu harus memberikan penjelasan yang akurat tapi mudah dipahami.",
+                title: "Anak Ahli: Sudah Mahir tentang KA 🧠",
+                scenario: "Kamu sudah sangat paham tentang KA dan sering membaca artikel tentangnya. Sekarang kamu ikut lomba presentasi tentang KA di sekolah. Kamu harus menjawab pertanyaan juri dengan percaya diri!",
                 questions: [
                     {
-                        question: "Anak: 'Bagaimana KA bisa tahu lagu yang aku suka?' Penjelasan teknis yang sederhana:",
+                        question: "Juri: 'Bagaimana KA bisa tahu lagu yang kamu suka di Spotify?' Kamu jelaskan:",
                         options: [
-                            "KA menganalisis pola dari lagu yang sering kamu dengar dan cari yang mirip",
+                            "KA menganalisis pola dari lagu yang sering aku dengar dan cari yang mirip",
                             "KA menebak-nebak saja",
-                            "KA bertanya ke teman-temanmu",
-                            "KA menggunakan kamera untuk lihat ekspresi wajahmu"
+                            "KA bertanya ke teman-temanku",
+                            "KA menggunakan kamera untuk lihat ekspresi wajahku"
                         ],
                         correct: 0
                     },
                     {
-                        question: "Anak: 'Apa bedanya KA dengan program komputer biasa?' Jelaskan:",
+                        question: "Juri: 'Apa bedanya KA dengan program komputer biasa?' Kamu jelaskan:",
                         options: [
                             "Tidak ada bedanya",
                             "KA bisa belajar dan beradaptasi, program biasa hanya mengikuti instruksi tetap",
@@ -993,22 +993,22 @@
                         correct: 1
                     },
                     {
-                        question: "Anak: 'Bisakah kita membuat KA sendiri?' Jawaban yang memotivasi:",
+                        question: "Juri: 'Bisakah anak seusiamu membuat KA?' Kamu jawab dengan semangat:",
                         options: [
                             "Tidak mungkin, terlalu sulit",
                             "Hanya orang dewasa yang bisa",
-                            "Bisa! Mulai dengan belajar coding dan matematika, ada tools sederhana untuk belajar",
+                            "Bisa! Aku bisa mulai belajar coding dan matematika, ada tools sederhana untuk belajar",
                             "Tunggu sampai kuliah dulu"
                         ],
                         correct: 2
                     },
                     {
-                        question: "Anak: 'Apa yang harus kita siapkan untuk masa depan dengan KA?' Saran terbaik:",
+                        question: "Juri: 'Apa rencanamu dengan KA di masa depan?' Kamu jawab dengan yakin:",
                         options: [
                             "Tidak usah belajar apa-apa, KA akan mengerjakan semua",
-                            "Tetap belajar, kembangkan kreativitas, dan gunakan KA sebagai alat bantu",
-                            "Hindari semua teknologi KA",
-                            "Fokus hanya pada pelajaran tradisional"
+                            "Aku akan terus belajar, kembangkan kreativitas, dan gunakan KA sebagai alat bantu",
+                            "Aku akan hindari semua teknologi KA",
+                            "Aku fokus hanya pada pelajaran tradisional"
                         ],
                         correct: 1
                     }
@@ -1763,5 +1763,5 @@
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976fdff935214109',t:'MTc1NjUxMDYzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'977005ac313d87f9',t:'MTc1NjUxMjE3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
